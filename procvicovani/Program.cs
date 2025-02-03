@@ -8,30 +8,15 @@ namespace Tridy_procvicovani
 {
     internal class Program
     {
-        public void Znamky()
-        {
-            Console.WriteLine("Zadejte 5 známek");
-            try
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    znamky.Add(Convert.ToInt32(Console.ReadLine()));
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("neco se pokazilo");
-            }
-        }
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Zadejte jméno studenta");
+            Console.WriteLine("Zadejte jméno studenta: ");
             Student s1 = new Student();
             s1.Jmeno = Console.ReadLine();
             Student s2 = new Student();
             Student s3 = new Student();
-            Console.WriteLine("Zadejte 5 známek");
+            Console.WriteLine("Zadejte 5 známek: ");
             try
             {
                 for (int i = 0; i < 5; i++)
@@ -41,11 +26,11 @@ namespace Tridy_procvicovani
             }
             catch (Exception e)
             {
-                Console.WriteLine("neco se pokazilo");
+                Console.WriteLine("Něco se pokazilo.");
             }
 
             s1.KontrolaPrumeru();
-            Console.WriteLine("počet studentu: " + Student.seznamStudentu);
+            Console.WriteLine("počet studentů: " + Student.seznamStudentu);
             Console.ReadKey();
             // - přidání známky přepište na vlastní metodu (v rámci třídy)
 
@@ -62,9 +47,27 @@ namespace Tridy_procvicovani
             znamky = new List<int>();
             seznamStudentu++;
         }
+
+        public void Znamky()
+        {
+            Console.WriteLine("Zadejte 5 známek: ");
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    znamky.Add(Convert.ToInt32(Console.ReadLine()));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Něco se pokazilo.");
+            }
+        }
+
+
         public void ZobrazInfo()
         {
-            Console.WriteLine("Jmeno studenta: " + Jmeno + "\nJeho prumer: " + PrumernaZnamka);
+            Console.WriteLine("Jméno studenta: " + Jmeno + "\nJeho průměr: " + PrumernaZnamka);
         }
         public void KontrolaPrumeru()
         {
@@ -82,7 +85,7 @@ namespace Tridy_procvicovani
             }
             catch (Exception e)
             {
-                Console.WriteLine("neco se pokazilo");
+                Console.WriteLine("Něco se pokazilo.");
             }
         }
     }
