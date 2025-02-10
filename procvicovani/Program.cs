@@ -8,37 +8,46 @@ namespace Tridy_procvicovani
     {
         static void Main(string[] args)
         {
-            // Vytvoření nového studenta
-            Console.WriteLine("Zadejte jméno studenta");
-            Student s1 = new Student();
-            s1.Jmeno = Console.ReadLine();
-
-            Student s2 = new Student();
-            Student s3 = new Student();
-
-            Console.WriteLine("Zadejte 5 známek");
-            try
+            while (true)
             {
+                Console.WriteLine("Zadejte jméno studenta:");
+                string jmeno = Console.ReadLine();
+                if (jmeno.ToLower() == "exit")
+                    break;
+
+                Student student = new Student();
+                student.Jmeno = jmeno;
+
+                Console.WriteLine("Zadejte 5 známek:");
                 for (int i = 0; i < 5; i++)
                 {
-                    s1.AddGrade(Convert.ToInt32(Console.ReadLine()));
+                    bool validInput = false;
+                    while (!validInput)
+                    {
+                        try
+                        {
+                            int grade = Convert.ToInt32(Console.ReadLine());
+                            if (grade >= 1 && grade <= 5)
+                            {
+                                student.AddGrade(grade);
+                                validInput = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Známka musí být v rozmezí 1-5. Zadejte znovu:");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Neplatný vstup, zadejte číslo mezi 1-5:");
+                        }
+                    }
                 }
             }
-            catch (Exception)
-            {
-                Console.WriteLine("Něco se pokazilo při zadávání známek");
-            }
 
-            s1.KontrolaPrumeru();
-
-            Console.WriteLine("Počet studentů: " + Student.seznamStudentu.Count);
-
-            Student.DisplayStudentNames();
-
-            s1.ModifyGrade(2, 5);
-
-            Student.DisplayStudentNames();
-
+            Console.WriteLine("Počet studentů: " + Student.GetStudentCount());
+            Student.JmenaStudenti();
+            Student.VsechnyPrumery();
             Console.ReadKey();
         }
     }
@@ -46,47 +55,40 @@ namespace Tridy_procvicovani
     public class Student
     {
         public string Jmeno;
-        public double PrumernaZnamka;
         public List<int> znamky;
         public static List<Student> seznamStudentu = new List<Student>();
 
         public Student()
         {
-            znamky = new List<int>(); 
+            znamky = new List<int>();
             seznamStudentu.Add(this);
-        }
-
-        public void ZobrazInfo()
-        {
-            Console.WriteLine("Jméno studenta: " + Jmeno + "\nJeho průměr: " + PrumernaZnamka);
         }
 
         public void KontrolaPrumeru()
         {
-            try
+            if (znamky.Count == 0)
             {
-                double prumer = znamky.Average();
-                if (prumer < 1.5)
-                {
-                    Console.WriteLine("Student má nárok na stipendium.");
-                }
-                else
-                {
-                    Console.WriteLine("Student nemá nárok na stipendium.");
-                }
+                Console.WriteLine("Student nemá žádné známky.");
+                return;
             }
-            catch (Exception)
+
+            double prumer = znamky.Average();
+            if (prumer < 1.5)
             {
-                Console.WriteLine("Něco se pokazilo při výpočtu průměru");
+                Console.WriteLine("Student " + Jmeno + " má nárok na stipendium.");
+            }
+            else
+            {
+                Console.WriteLine("Student " + Jmeno + " nemá nárok na stipendium.");
             }
         }
 
         public void AddGrade(int grade)
         {
-            znamky.Add(grade); 
+            znamky.Add(grade);
         }
 
-        public static void DisplayStudentNames()
+        public static void JmenaStudenti()
         {
             Console.WriteLine("Jména všech studentů:");
             foreach (var student in seznamStudentu)
@@ -97,14 +99,41 @@ namespace Tridy_procvicovani
 
         public void ModifyGrade(int index, int newGrade)
         {
-            if (index >= 0 && index < znamky.Count)
+            if (index >= 0 && index < znamky.Count && newGrade >= 1 && newGrade <= 5)
             {
                 znamky[index] = newGrade;
                 Console.WriteLine("Známka na pozici " + index + " byla upravena na " + newGrade);
             }
             else
             {
-                Console.WriteLine("Neplatný index.");
+                Console.WriteLine("Neplatný index nebo známka.");
+            }
+        }
+
+        public void ResetGrades()
+        {
+            znamky.Clear();
+            Console.WriteLine("Všechny známky studenta " + Jmeno + " byly smazány.");
+        }
+
+        public static int GetStudentCount()
+        {
+            return seznamStudentu.Count;
+        }
+
+        public static void VsechnyPrumery()
+        {
+            Console.WriteLine("Průměry všech studentů:");
+            foreach (var student in seznamStudentu)
+            {
+                if (student.znamky.Count > 0)
+                {
+                    Console.WriteLine(student.Jmeno + ": " + student.znamky.Average());
+                }
+                else
+                {
+                    Console.WriteLine(student.Jmeno + ": Nemá žádné známky.");
+                }
             }
         }
     }
