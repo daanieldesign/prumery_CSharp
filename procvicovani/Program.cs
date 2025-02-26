@@ -10,45 +10,32 @@ namespace Tridy_procvicovani
         {
             while (true)
             {
-                Console.WriteLine("Zadejte jméno studenta ('exit' pro ukončení):");
+                Console.WriteLine("Zadejte jméno studenta (nebo 'exit' pro ukončení):");
                 string jmeno = Console.ReadLine();
                 if (jmeno.ToLower() == "exit")
-                    break;
+                {
+                    Environment.Exit(0);
+                }
 
                 Student student = new Student(jmeno);
 
-                Console.WriteLine("Zadejte 5 známek (1-5). Nepoužívejte známky, jako je A, *, - atd.:");
+                Console.WriteLine("Zadejte 5 známek (1-5):");
                 for (int i = 0; i < 5; i++)
                 {
                     student.PridatZnamku();
+                }
+
+                Console.WriteLine("Chcete přidat dalšího studenta? (ano/ne)");
+                string odpoved = Console.ReadLine().ToLower();
+                if (odpoved == "ne")
+                {
+                    break;
                 }
             }
 
             Console.WriteLine("\nCelkový počet studentů: " + Student.PocetStudentu());
             Student.ZobrazitJmena();
             Student.ZobrazitPrumer();
-
-            Console.WriteLine("\nSmazat známky a přidat nové? (ano/ne)");
-            string odpoved = Console.ReadLine().ToLower();
-            if (odpoved == "ano")
-            {
-                Console.WriteLine("Zadejte jméno studenta:");
-                string jmeno = Console.ReadLine();
-                Student student = Student.NajitStudenta(jmeno);
-                if (student != null)
-                {
-                    student.SmazatZnamky();
-                    Console.WriteLine("Zadejte nové známky:");
-                    for (int i = 0; i < 5; i++)
-                    {
-                        student.PridatZnamku();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Student nebyl nalezen.");
-                }
-            }
 
             Console.ReadKey();
         }
@@ -90,17 +77,6 @@ namespace Tridy_procvicovani
                     Console.WriteLine("Neplatný vstup, zadejte číslo mezi 1-5:");
                 }
             }
-        }
-
-        public void SmazatZnamky()
-        {
-            znamky.Clear();
-            Console.WriteLine("Všechny známky studenta " + Jmeno + " byly smazány.");
-        }
-
-        public static Student NajitStudenta(string jmeno)
-        {
-            return seznamStudentu.FirstOrDefault(s => s.Jmeno.Equals(jmeno, StringComparison.OrdinalIgnoreCase));
         }
 
         public static int PocetStudentu()
